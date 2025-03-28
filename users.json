@@ -5,5 +5,12 @@
         "last_name": "Placido",
         "birthday": "2001-07-02",
         "gender": "Female"
+    },
+    "okaka": {
+        "password": "ilovenicole",
+        "first_name": "Kaye",
+        "last_name": "Marfil",
+        "birthday": "2001-09-11",
+        "gender": "Female"
     }
 }

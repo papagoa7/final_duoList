@@ -154,7 +154,7 @@ back_button = tk.Button(root, text="Back", font=("Courier", 12), width=10, comma
 back_button.place(x=10, y=10)
 
 start_button = tk.Button(root, text="Start", font=("Courier", 12), width=10, command=start_game, bg="black", fg="white")
-start_button.pack(pady=50)
+start_button.pack(pady=30)
 
 score_label = tk.Label(root, text=f"Your score: {user_score}", font=("Courier", 14), bg="black", fg="white")
 score_label.pack(pady=10)  # Now the score label is directly under the start button
