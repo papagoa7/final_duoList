@@ -1,4 +1,3 @@
-#Sign-up, View all records, Search a record, Exit
 import tkinter as tk
 from tkinter import ttk, messagebox
 import json
@@ -19,6 +18,8 @@ def load_records():
 def save_records(records):
     with open(DATA_FILE, "w") as file:
         json.dump(records, file, indent=4)
+
+logged_in = False  # Track user authentication
 
 def sign_up():
     def save():
@@ -48,7 +49,7 @@ def sign_up():
     
     signup_window = tk.Toplevel(root)
     signup_window.title("Sign Up")
-    signup_window.geometry("400x300")
+    signup_window.geometry("420x300")
     signup_window.configure(bg="#f0f0f0")
     
     frame = ttk.Frame(signup_window, padding=10)
@@ -75,13 +76,50 @@ def sign_up():
     gender_frame = ttk.Frame(frame)
     gender_frame.grid(row=4, column=1, columnspan=2, pady=5)
     
-    ttk.Radiobutton(gender_frame, text="Male", variable=gender_var, value="Male").pack(side=tk.LEFT)
-    ttk.Radiobutton(gender_frame, text="Female", variable=gender_var, value="Female").pack(side=tk.LEFT)
-    ttk.Radiobutton(gender_frame, text="Prefer not to say", variable=gender_var, value="Prefer not to say").pack(side=tk.LEFT)
+    ttk.Radiobutton(gender_frame, text="Male", variable=gender_var, value="Male").pack(side=tk.LEFT, padx=5)
+    ttk.Radiobutton(gender_frame, text="Female", variable=gender_var, value="Female").pack(side=tk.LEFT, padx=5)
+    ttk.Radiobutton(gender_frame, text="Prefer not to say", variable=gender_var, value="Prefer not to say").pack(side=tk.LEFT, padx=5)
     
     ttk.Button(frame, text="Save", command=save).grid(row=5, column=0, columnspan=2, pady=10)
 
+def sign_in():
+    def authenticate():
+        global logged_in
+        first_name = entry_first.get()
+        last_name = entry_last.get()
+        birthday = entry_bday.get()
+        records = load_records()
+        
+        for record in records:
+            if (record['first_name'] == first_name and record['last_name'] == last_name and record['birthday'] == birthday):
+                logged_in = True
+                messagebox.showinfo("Success", "Sign-in successful! You can now view records.")
+                sign_in_window.destroy()
+                return
+        messagebox.showerror("Error", "Record not found. Please try again.")
+    
+    sign_in_window = tk.Toplevel(root)
+    sign_in_window.title("Sign In")
+    sign_in_window.geometry("300x250")
+    
+    ttk.Label(sign_in_window, text="First Name:").pack(pady=5)
+    entry_first = ttk.Entry(sign_in_window)
+    entry_first.pack(pady=5)
+    
+    ttk.Label(sign_in_window, text="Last Name:").pack(pady=5)
+    entry_last = ttk.Entry(sign_in_window)
+    entry_last.pack(pady=5)
+    
+    ttk.Label(sign_in_window, text="Birthday (YYYY-MM-DD):").pack(pady=5)
+    entry_bday = ttk.Entry(sign_in_window)
+    entry_bday.pack(pady=5)
+    
+    ttk.Button(sign_in_window, text="Sign In", command=authenticate).pack(pady=10)
+
 def view_records():
+    if not logged_in:
+        messagebox.showerror("Error", "You must sign in first to view records.")
+        return
     records = load_records()
     view_window = tk.Toplevel(root)
     view_window.title("All Records")
@@ -103,31 +141,6 @@ def view_records():
         for record in records:
             text_box.insert(tk.END, f"{record['first_name']} {record['middle_name']} {record['last_name']} - {record['birthday']} - {record['gender']}\n")
 
-def search_record():
-    def search():
-        query = entry_search.get().lower()
-        records = load_records()
-        results = [r for r in records if query in r['first_name'].lower() or query in r['last_name'].lower()]
-        
-        result_window = tk.Toplevel(search_window)
-        result_window.title("Search Results")
-        
-        text_box = tk.Text(result_window, wrap=tk.WORD, height=10, width=50)
-        text_box.pack()
-        
-        if not results:
-            text_box.insert(tk.END, "No matching records found.\n")
-        else:
-            for record in results:
-                text_box.insert(tk.END, f"{record['first_name']} {record['middle_name']} {record['last_name']} - {record['birthday']} - {record['gender']}\n")
-    
-    search_window = tk.Toplevel(root)
-    search_window.title("Search Record")
-    tk.Label(search_window, text="Enter First or Last Name:").pack()
-    entry_search = ttk.Entry(search_window)
-    entry_search.pack()
-    ttk.Button(search_window, text="Search", command=search).pack()
-
 root = tk.Tk()
 root.title("User Records")
 root.geometry("500x200")
@@ -137,8 +150,8 @@ menu_frame = ttk.Frame(root, padding=20)
 menu_frame.pack(pady=20)
 
 ttk.Button(menu_frame, text="Sign Up", command=sign_up).grid(row=0, column=0, padx=10)
-ttk.Button(menu_frame, text="View All Records", command=view_records).grid(row=0, column=1, padx=10)
-ttk.Button(menu_frame, text="Search Record", command=search_record).grid(row=0, column=2, padx=10)
+ttk.Button(menu_frame, text="Sign In", command=sign_in).grid(row=0, column=1, padx=10)
+ttk.Button(menu_frame, text="View All Records", command=view_records).grid(row=0, column=2, padx=10)
 ttk.Button(menu_frame, text="Exit", command=root.quit).grid(row=0, column=3, padx=10)
 
 root.mainloop()
