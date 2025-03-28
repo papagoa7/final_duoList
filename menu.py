@@ -1,15 +1,32 @@
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
+import json
 import os
+
+CURRENT_USER_FILE = "current_user.json"
+
+def get_current_user():
+    try:
+        with open(CURRENT_USER_FILE, "r") as file:
+            return json.load(file).get("username", "Guest")
+    except FileNotFoundError:
+        return "Guest"
+
+def logout():
+    with open(CURRENT_USER_FILE, "w") as file:
+        json.dump({}, file)
+    root.destroy()
+    import os
+    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe main.py")
 
 def reset():
     root.destroy()
-    os.system("py main.py")
+    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe main.py")
 
 def tictactoe_game():
     root.destroy()
-    os.system("py tictactoe.py")
+    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe tictactoe.py")
 
 def show_custom_message():
     popup = tk.Toplevel(root)
@@ -41,7 +58,7 @@ def show_custom_message():
 
 def rockpaperscissors_game():
     root.destroy()
-    os.system("py rockpaperscissors.py")
+    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe rockpaperscissors.py")
 
 def center_window(root, width=900, height=500):
     screen_width = root.winfo_screenwidth()
@@ -50,10 +67,13 @@ def center_window(root, width=900, height=500):
     y = (screen_height // 2) - (height // 2)
     root.geometry(f"{width}x{height}+{x}+{y}")
 
+
 def create_menu():
     global root
 
-    title_label = tk.Label(root, text="Game Menu", font=("Courier", 18), bg="black", fg="white")
+    user = get_current_user()
+
+    title_label = tk.Label(root, text=f"Welcome, {user}!", font=("Courier", 18), bg="black", fg="white")
     title_label.pack(pady=50)
 
     tictactoe_button = tk.Button(root, text="Tic-Tac-Toe", font=("Courier", 14), width=30, borderwidth=5, command=show_custom_message)
@@ -61,6 +81,9 @@ def create_menu():
 
     rockpaperscissors_button = tk.Button(root, text="Rock, Paper, Scissors", font=("Courier", 14), width=30, borderwidth=5, command=rockpaperscissors_game)
     rockpaperscissors_button.pack(pady=10)
+
+    logout_button = tk.Button(root, text="Sign Out", font=("Courier", 14), width=30, borderwidth=5, command=logout)
+    logout_button.pack(pady=10)
 
     exit_button = tk.Button(root, text="Exit", font=("Courier", 14), width=30, borderwidth=5, command=root.quit)
     exit_button.pack(pady=10)
@@ -71,6 +94,7 @@ root = tk.Tk()
 root.title("Game Menu")
 center_window(root, 900, 500)
 root.configure(bg="black")
+
 
 bg_image = Image.open("img/space.gif")
 bg_image = bg_image.resize((900, 500))

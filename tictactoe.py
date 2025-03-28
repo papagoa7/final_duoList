@@ -113,7 +113,7 @@ class TicTacToe:
 
     def go_back(self):
         self.root.destroy()
-        os.system("py menu.py")
+        os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe menu.py")
 
     def center_window(self, width=900, height=500):
         screen_width = self.root.winfo_screenwidth()

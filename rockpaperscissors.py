@@ -3,6 +3,54 @@ import random
 import time
 import os
 from PIL import Image, ImageTk
+import json
+
+RPS_SCORE_FILE = "rpsScore.json"
+CURRENT_USER_FILE = "current_user.json"
+
+def load_current_user():
+    try:
+        with open(CURRENT_USER_FILE, "r") as file:
+            data = json.load(file)
+            return data.get("username")
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+
+def save_current_user(username):
+    with open(CURRENT_USER_FILE, "w") as file:
+        json.dump({"username": username}, file)
+
+def load_score():
+    global current_user
+    if current_user is None:
+        return 0
+    try:
+        with open(RPS_SCORE_FILE, "r") as file:
+            data = json.load(file)
+            return data.get(current_user, 0)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return 0
+
+def save_score():
+    global current_user, user_score
+    if current_user is None:
+        return
+    try:
+        with open(RPS_SCORE_FILE, "r") as file:
+            data = json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        data = {}
+
+    data[current_user] = user_score
+
+    with open(RPS_SCORE_FILE, "w") as file:
+        json.dump(data, file)
+
+current_user = load_current_user()
+if current_user is None:
+    current_user = "Guest"
+    save_current_user(current_user)
+user_score = load_score()
 
 def show_rules():
     popup = tk.Toplevel(root)
@@ -45,18 +93,25 @@ def start_game():
     enable_buttons()
 
 def play(choice):
+    global user_score
     options = ["Rock", "Paper", "Scissors"]
     computer_choice = random.choice(options)
     result = determine_winner(choice, computer_choice)
+
     result_label.config(text=f"Computer chose: {computer_choice}\n{result}", bg="black", fg="white")
+    score_label.config(text=f"Your score: {user_score}")
+    save_score()
     disable_buttons()
 
 def determine_winner(player, computer):
+    global user_score
+
     if player == computer:
         return "It's a tie!"
     elif (player == "Rock" and computer == "Scissors") or \
          (player == "Paper" and computer == "Rock") or \
          (player == "Scissors" and computer == "Paper"):
+        user_score += 1
         return "You win!"
     else:
         return "Computer wins!"
@@ -80,7 +135,7 @@ def disable_buttons():
 
 def go_back():
     root.destroy()
-    os.system("py menu.py")
+    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe menu.py")
 
 root = tk.Tk()
 root.title("Rock Paper Scissors")
@@ -101,6 +156,9 @@ back_button.place(x=10, y=10)
 start_button = tk.Button(root, text="Start", font=("Courier", 12), width=10, command=start_game, bg="black", fg="white")
 start_button.pack(pady=50)
 
+score_label = tk.Label(root, text=f"Your score: {user_score}", font=("Courier", 14), bg="black", fg="white")
+score_label.pack(pady=10)  # Now the score label is directly under the start button
+
 button_frame = tk.Frame(root, bg="white")
 button_frame.pack()
 
@@ -112,7 +170,7 @@ rock_photo = ImageTk.PhotoImage(rock_img)
 paper_photo = ImageTk.PhotoImage(paper_img)
 scissors_photo = ImageTk.PhotoImage(scissors_img)
 
-rock_button = tk.Button(button_frame, image=rock_photo, command=lambda: play("Rock"), bg="orange", activebackground="black", borderwidth=10, )
+rock_button = tk.Button(button_frame, image=rock_photo, command=lambda: play("Rock"), bg="orange", activebackground="black", borderwidth=10)
 paper_button = tk.Button(button_frame, image=paper_photo, command=lambda: play("Paper"), bg="orange", activebackground="black", borderwidth=10)
 scissors_button = tk.Button(button_frame, image=scissors_photo, command=lambda: play("Scissors"), bg="orange", activebackground="black", borderwidth=10)
 
