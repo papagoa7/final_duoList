@@ -1,0 +1,23 @@
+[
+    {
+        "first_name": "Xyrus",
+        "middle_name": "Marfil",
+        "last_name": "Tan",
+        "birthday": "2001-06-11",
+        "gender": "Male"
+    },
+    {
+        "first_name": "Hahaha",
+        "middle_name": "",
+        "last_name": "Hohoho",
+        "birthday": "2001-01-01",
+        "gender": "Prefer not to say"
+    },
+    {
+        "first_name": "Geli",
+        "middle_name": "Viz",
+        "last_name": "Sacurom",
+        "birthday": "2001-04-11",
+        "gender": "Female"
+    }
+]
