@@ -60,6 +60,10 @@ def rockpaperscissors_game():
     root.destroy()
     os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe rockpaperscissors.py")
 
+def reactiontime_game():
+    root.destroy()
+    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe reactiontest.py")
+
 def center_window(root, width=900, height=500):
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
@@ -76,16 +80,19 @@ def create_menu():
     title_label = tk.Label(root, text=f"Welcome, {user}!", font=("Courier", 18), bg="black", fg="white")
     title_label.pack(pady=50)
 
-    tictactoe_button = tk.Button(root, text="Tic-Tac-Toe", font=("Courier", 14), width=30, borderwidth=5, command=show_custom_message)
+    tictactoe_button = tk.Button(root, text="Tic-Tac-Toe", font=("Courier", 14), bg="aquamarine3", fg="white", width=30, borderwidth=5, command=show_custom_message)
     tictactoe_button.pack(pady=10)
 
-    rockpaperscissors_button = tk.Button(root, text="Rock, Paper, Scissors", font=("Courier", 14), width=30, borderwidth=5, command=rockpaperscissors_game)
+    rockpaperscissors_button = tk.Button(root, text="Rock, Paper, Scissors", font=("Courier", 14), bg="orange", fg="white", width=30, borderwidth=5, command=rockpaperscissors_game)
     rockpaperscissors_button.pack(pady=10)
 
-    logout_button = tk.Button(root, text="Sign Out", font=("Courier", 14), width=30, borderwidth=5, command=logout)
+    reactiontime_button = tk.Button(root, text="Reaction Time Test", font=("Courier", 14), bg="steelblue", fg="white", width=30, borderwidth=5, command=reactiontime_game)
+    reactiontime_button.pack(pady=10)
+
+    logout_button = tk.Button(root, text="Sign Out", font=("Courier", 14), bg="red", fg="white", width=30, borderwidth=5, command=logout)
     logout_button.pack(pady=10)
 
-    exit_button = tk.Button(root, text="Exit", font=("Courier", 14), width=30, borderwidth=5, command=root.quit)
+    exit_button = tk.Button(root, text="Exit", font=("Courier", 14), bg="gray", fg="white", width=30, borderwidth=5, command=root.quit)
     exit_button.pack(pady=10)
 
     root.mainloop()

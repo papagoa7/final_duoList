@@ -7,6 +7,7 @@ import os
 USER_FILE = "users.json"
 CURRENT_USER_FILE = "current_user.json"
 RPS_SCORE_FILE = "rpsScore.json"
+RTT_SCORE_FILE = "rttScore.json"
 
 def center_window(root, width=900, height=500):
     screen_width = root.winfo_screenwidth()
@@ -17,10 +18,18 @@ def center_window(root, width=900, height=500):
 
 def load_scores():
     try:
-        with open(RPS_SCORE_FILE, "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return {}
+        with open(RPS_SCORE_FILE, "r") as rps_file:
+            rps_scores = json.load(rps_file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        rps_scores = {}
+
+    try:
+        with open(RTT_SCORE_FILE, "r") as rtt_file:
+            rtt_scores = json.load(rtt_file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        rtt_scores = {}
+
+    return rps_scores, rtt_scores
 
 def load_users():
     try:
@@ -148,7 +157,8 @@ def sign_in():
 
 def view_all_records():
     users = load_users()
-    scores = load_scores()
+    rps_scores, rtt_scores = load_scores()
+
     records_window = tk.Toplevel(root)
     records_window.title("All User Records")
     records_window.geometry("500x400")
@@ -156,10 +166,19 @@ def view_all_records():
     tk.Label(records_window, text="Registered Users:", font=("Courier", 12, "bold")).pack(pady=5)
 
     for username, details in users.items():
-        user_score = scores.get(username, 0)
-        user_info = f"Username: {username}\nFull Name: {details['first_name']} {details['last_name']}\nBirthday: {details['birthday']}\nGender: {details['gender']}\nRock Paper Scissors: {user_score}"
-        tk.Label(records_window, text=user_info, justify="left", padx=10, pady=5, font="Courier").pack()
+        rps_score = rps_scores.get(username, "N/A")
+        rtt_score = rtt_scores.get(username, "N/A")
 
+        user_info = (
+            f"Username: {username}\n"
+            f"Full Name: {details['first_name']} {details['last_name']}\n"
+            f"Birthday: {details['birthday']}\n"
+            f"Gender: {details['gender']}\n"
+            f"Rock Paper Scissors Score: {rps_score}\n"
+            f"Best Reaction Time: {rtt_score:.3f} seconds"
+        )
+
+        tk.Label(records_window, text=user_info, justify="left", padx=10, pady=5, font="Courier").pack()
 def search_record():
     def search():
         username = entry_username.get().strip()
@@ -195,6 +214,38 @@ def search_record():
     result_label = tk.Label(frame, text="", font=("Courier", 12), justify="left")
     result_label.grid(row=2, column=0, columnspan=2, pady=10)
 
+def delete_user():
+    def confirm_delete():
+        username = entry_username.get().strip()
+        users = load_users()
+        rps_scores, rtt_scores = load_scores()
+
+        if username in users:
+            del users[username]
+            rps_scores.pop(username, None)
+            rtt_scores.pop(username, None)
+
+            save_users(users)  # Update user records
+            with open(RPS_SCORE_FILE, "w") as rps_file:
+                json.dump(rps_scores, rps_file, indent=4)
+            with open(RTT_SCORE_FILE, "w") as rtt_file:
+                json.dump(rtt_scores, rtt_file, indent=4)
+
+            messagebox.showinfo("Success", f"User '{username}' deleted successfully!")
+            delete_window.destroy()
+        else:
+            messagebox.showerror("Error", "User not found!")
+
+    delete_window = tk.Toplevel(root)
+    delete_window.title("Delete User")
+    delete_window.geometry("400x200")
+
+    tk.Label(delete_window, text="Enter Username to Delete:", font="Courier").pack(pady=10)
+    entry_username = tk.Entry(delete_window)
+    entry_username.pack(pady=5)
+
+    tk.Button(delete_window, text="Delete User", command=confirm_delete, font="Courier", bg="red", fg="white").pack(pady=20)
+
 def exit_main():
     root.destroy()
 
@@ -210,12 +261,13 @@ bg_photo = ImageTk.PhotoImage(bg_image)
 bg_label = tk.Label(root, image=bg_photo)
 bg_label.place(relwidth=1, relheight=1)
 
-title_label = tk.Label(root, text="Welcome to DuoList!", font=("Courier", 20), bg="black", fg="white").pack(pady=60)
+title_label = tk.Label(root, text="Welcome to DuoList!", font=("Courier", 20), bg="black", fg="white").pack(pady=50)
 
-tk.Button(root, text="Sign Up", command=sign_up, font="Courier", width=20, bg="black", fg="white").pack(pady=10)
-tk.Button(root, text="Sign In", command=sign_in, font="Courier", width=20, bg="black", fg="white").pack(pady=10)
-tk.Button(root, text="View All Records", command=view_all_records, font="Courier", width=20, bg="black", fg="white").pack(pady=10)
-tk.Button(root, text="Search Record", command=search_record, font="Courier", width=20, bg="black", fg="white").pack(pady=10)
-tk.Button(root, text="Exit", command=exit_main, font="Courier", width=20, bg="black", fg="white").pack(pady=10)
+tk.Button(root, text="Sign Up", command=sign_up, font="Courier", width=20, bg="orange", fg="white").pack(pady=10)
+tk.Button(root, text="Sign In", command=sign_in, font="Courier", width=20, bg="green", fg="white").pack(pady=10)
+tk.Button(root, text="View All Records", command=view_all_records, font="Courier", width=20, bg="purple", fg="white").pack(pady=10)
+tk.Button(root, text="Search Record", command=search_record, font="Courier", width=20, bg="blue", fg="white").pack(pady=10)
+tk.Button(root, text="Delete User", command=delete_user, font="Courier", width=20, bg="red", fg="white").pack(pady=10)
+tk.Button(root, text="Exit", command=exit_main, font="Courier", width=20, bg="gray", fg="white").pack(pady=10)
 
 root.mainloop()
