@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 import json
-import os
+import subprocess
 
 USER_FILE = "users.json"
 CURRENT_USER_FILE = "current_user.json"
@@ -129,7 +129,7 @@ def sign_in():
             save_current_user(username)
             messagebox.showinfo("Success", "Sign-in successful!")
             root.destroy()
-            os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe menu.py")
+            subprocess.run(["python", "menu.py"])
         else:
             messagebox.showerror("Error", "Invalid credentials!")
 

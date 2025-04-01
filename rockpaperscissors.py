@@ -1,7 +1,7 @@
 import tkinter as tk
 import random
 import time
-import os
+import subprocess
 from PIL import Image, ImageTk
 import json
 
@@ -135,7 +135,7 @@ def disable_buttons():
 
 def go_back():
     root.destroy()
-    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe menu.py")
+    subprocess.run(["python", "menu.py"])
 
 root = tk.Tk()
 root.title("Rock Paper Scissors")

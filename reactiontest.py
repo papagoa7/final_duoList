@@ -1,7 +1,7 @@
 import tkinter as tk
 import time
 import random
-import os
+import subprocess
 import json
 from PIL import Image, ImageTk
 
@@ -85,7 +85,7 @@ def center_window(root, width=900, height=500):
 
 def go_back():
     root.destroy()
-    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe menu.py")
+    subprocess.run(["python", "menu.py"])
 
 root = tk.Tk()
 root.title("Reaction Time Test")

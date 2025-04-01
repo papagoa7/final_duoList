@@ -1,6 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-import os
+import subprocess
 
 class TicTacToe:
     def __init__(self, root):
@@ -113,7 +113,7 @@ class TicTacToe:
 
     def go_back(self):
         self.root.destroy()
-        os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe menu.py")
+        subprocess.run(["python", "menu.py"])
 
     def center_window(self, width=900, height=500):
         screen_width = self.root.winfo_screenwidth()

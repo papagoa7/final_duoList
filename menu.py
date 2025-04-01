@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 import json
-import os
+import subprocess
 
 CURRENT_USER_FILE = "current_user.json"
 
@@ -17,16 +17,15 @@ def logout():
     with open(CURRENT_USER_FILE, "w") as file:
         json.dump({}, file)
     root.destroy()
-    import os
-    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe main.py")
+    subprocess.run(["python", "main.py"])
 
 def reset():
     root.destroy()
-    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe main.py")
+    subprocess.run(["python", "main.py"])
 
 def tictactoe_game():
     root.destroy()
-    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe tictactoe.py")
+    subprocess.run(["python", "tictactoe.py"])
 
 def show_custom_message():
     popup = tk.Toplevel(root)
@@ -58,11 +57,11 @@ def show_custom_message():
 
 def rockpaperscissors_game():
     root.destroy()
-    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe rockpaperscissors.py")
+    subprocess.run(["python", "rockpaperscissors.py"])
 
 def reactiontime_game():
     root.destroy()
-    os.system("C:/Users/Nicole/AppData/Local/Programs/Python/Python313/python.exe reactiontest.py")
+    subprocess.run(["python", "reactiontest.py"])
 
 def center_window(root, width=900, height=500):
     screen_width = root.winfo_screenwidth()
@@ -70,7 +69,6 @@ def center_window(root, width=900, height=500):
     x = (screen_width // 2) - (width // 2)
     y = (screen_height // 2) - (height // 2)
     root.geometry(f"{width}x{height}+{x}+{y}")
-
 
 def create_menu():
     global root
@@ -101,7 +99,6 @@ root = tk.Tk()
 root.title("Game Menu")
 center_window(root, 900, 500)
 root.configure(bg="black")
-
 
 bg_image = Image.open("img/space.gif")
 bg_image = bg_image.resize((900, 500))
