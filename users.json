@@ -5,5 +5,12 @@
         "last_name": "Placido",
         "birthday": "2001-07-02",
         "gender": "Female"
+    },
+    "slyceu": {
+        "password": "123",
+        "first_name": "Xyrus",
+        "last_name": "Tan",
+        "birthday": "2001-06-11",
+        "gender": "Male"
     }
 }
