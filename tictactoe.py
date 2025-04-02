@@ -10,6 +10,8 @@ class TicTacToe:
         self.current_player = "X"
         self.board = ["" for _ in range(9)]
         self.buttons = []
+        self.score_x = 0
+        self.score_o = 0
 
         self.root.configure(bg="black")
 
@@ -27,11 +29,10 @@ class TicTacToe:
         self.board_frame.place(relx=0.5, rely=0.4, anchor="center")
 
         self.create_board()
-
         self.show_rules()
-
+        
     def show_rules(self):
-        popup = tk.Toplevel(root)
+        popup = tk.Toplevel(self.root)
         popup.title("Rules")
         popup.geometry("600x200")
 
@@ -47,17 +48,14 @@ class TicTacToe:
             popup,
             text="Two players take turns marking X or O in an empty cell. The first player to get three in a row (horizontal, vertical, or diagonal) wins!",
             font=("Courier", 12),
-            wraplength=500)
-
+            wraplength=500
+        )
         label.pack(pady=30)
 
-        button_frame = tk.Frame(popup)
-        button_frame.pack(pady=10)
+        go_button = tk.Button(popup, text="Got it!", command=popup.destroy, font=("Courier", 12), width=10, borderwidth=3)
+        go_button.pack(pady=10)
 
-        go_button = tk.Button(button_frame, text="Got it!", command=popup.destroy, font=("Courier", 12), width=10, borderwidth=3)
-        go_button.pack(side=tk.LEFT, padx=10)
-
-        popup.transient(root)
+        popup.transient(self.root)
         popup.grab_set()
 
     def create_board(self):
@@ -70,6 +68,9 @@ class TicTacToe:
         self.status_label = tk.Label(self.root, text="Player X's turn", font=("Courier", 14), bg="black", fg="white")
         self.status_label.place(relx=0.5, rely=0.80, anchor="center")
 
+        self.score_label = tk.Label(self.root, text=f"Score - X: {self.score_x} | O: {self.score_o}", font=("Courier", 14), bg="black", fg="white")
+        self.score_label.place(relx=0.5, rely=0.85, anchor="center")
+
         self.reset_button = tk.Button(self.root, text="Reset", font=("Courier", 14), bg="black", fg="white", command=self.reset_game)
         self.reset_button.place(relx=0.5, rely=0.90, anchor="center")
 
@@ -81,6 +82,7 @@ class TicTacToe:
 
             if self.check_winner():
                 self.status_label.config(text=f"Player {self.current_player} wins!")
+                self.update_score()
                 self.disable_buttons()
             elif "" not in self.board:
                 self.status_label.config(text="It's a tie!")
@@ -94,6 +96,13 @@ class TicTacToe:
             if self.board[a] == self.board[b] == self.board[c] and self.board[a] != "":
                 return True
         return False
+
+    def update_score(self):
+        if self.current_player == "X":
+            self.score_x += 1
+        else:
+            self.score_o += 1
+        self.score_label.config(text=f"Score - X: {self.score_x} | O: {self.score_o}")
 
     def disable_buttons(self):
         for button in self.buttons:
