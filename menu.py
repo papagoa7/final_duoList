@@ -6,24 +6,24 @@ import subprocess
 
 CURRENT_USER_FILE = "current_user.json"
 
-def get_current_user():
+def get_current_user(): #FUNCTION TO GET THE CURRENT USER
     try:
         with open(CURRENT_USER_FILE, "r") as file:
             return json.load(file).get("username", "Guest")
     except FileNotFoundError:
         return "Guest"
 
-def logout():
+def logout(): #FUNCTION TO LOGOUT THE CURRENT USER
     with open(CURRENT_USER_FILE, "w") as file:
         json.dump({}, file)
     root.destroy()
     subprocess.run(["python", "main.py"])
 
-def reset():
+def reset(): #FUNCITON TO RESET THE GAME
     root.destroy()
     subprocess.run(["python", "main.py"])
 
-def tictactoe_game():
+def tictactoe_game(): #FUNCTION TO START THE TIC TAC TOE GAME
     root.destroy()
     subprocess.run(["python", "tictactoe.py"])
 
@@ -55,32 +55,32 @@ def show_custom_message():
     popup.transient(root)
     popup.grab_set()
 
-def rockpaperscissors_game():
+def rockpaperscissors_game(): #FUNCTION TO START THE ROCK PAPER SCISSORS GAME
     root.destroy()
     subprocess.run(["python", "rockpaperscissors.py"])
 
-def reactiontime_game():
+def reactiontime_game(): #FUNCTION TO START THE REACTION TIME GAME
     root.destroy()
     subprocess.run(["python", "reactiontest.py"])
-    
-def diceroll_game():
+
+def diceroll_game(): #FUNCTION TO START THE DICE ROLL GAME
     root.destroy()
     subprocess.run(["python", "diceroll.py"])
 
-def center_window(root, width=900, height=500):
+def center_window(root, width=900, height=500): #FUNCTION TO CENTER THE WINDOW
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     x = (screen_width // 2) - (width // 2)
     y = (screen_height // 2) - (height // 2)
     root.geometry(f"{width}x{height}+{x}+{y}")
 
-def create_menu():
+def create_menu(): #FUNCTION TO CREATE THE MENU
     global root
 
     user = get_current_user()
 
     title_label = tk.Label(root, text=f"Welcome, {user}!", font=("Courier", 18), bg="black", fg="white")
-    title_label.pack(pady=50)
+    title_label.pack(pady=30)
 
     tictactoe_button = tk.Button(root, text="Tic-Tac-Toe", font=("Courier", 14), bg="aquamarine3", fg="white", width=30, borderwidth=5, command=show_custom_message)
     tictactoe_button.pack(pady=10)
@@ -90,7 +90,7 @@ def create_menu():
 
     reactiontime_button = tk.Button(root, text="Reaction Time Test", font=("Courier", 14), bg="steelblue", fg="white", width=30, borderwidth=5, command=reactiontime_game)
     reactiontime_button.pack(pady=10)
-    
+
     diceroll_button = tk.Button(root, text="Dice Roll Game", font=("Courier", 14), bg="purple", fg="white", width=30, borderwidth=5, command=diceroll_game)
     diceroll_button.pack(pady=10)
 

@@ -2,7 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import subprocess
 
-class TicTacToe:
+class TicTacToe: #CLASS
     def __init__(self, root):
         self.root = root
         self.root.title("Tic Tac Toe")
@@ -30,8 +30,8 @@ class TicTacToe:
 
         self.create_board()
         self.show_rules()
-        
-    def show_rules(self):
+
+    def show_rules(self): #SHOW RULES
         popup = tk.Toplevel(self.root)
         popup.title("Rules")
         popup.geometry("600x200")
@@ -58,7 +58,7 @@ class TicTacToe:
         popup.transient(self.root)
         popup.grab_set()
 
-    def create_board(self):
+    def create_board(self): #CREATE BOARD
         for i in range(3):
             for j in range(3):
                 btn = tk.Button(self.board_frame, text="", font=("Arial", 24), width=5, height=2, borderwidth=5, command=lambda i=i, j=j: self.make_move(i, j))
@@ -74,7 +74,7 @@ class TicTacToe:
         self.reset_button = tk.Button(self.root, text="Reset", font=("Courier", 14), bg="black", fg="white", command=self.reset_game)
         self.reset_button.place(relx=0.5, rely=0.90, anchor="center")
 
-    def make_move(self, i, j):
+    def make_move(self, i, j): #MAKE MOVE
         index = i * 3 + j
         if self.board[index] == "" and not self.check_winner():
             self.board[index] = self.current_player
@@ -90,29 +90,29 @@ class TicTacToe:
                 self.current_player = "O" if self.current_player == "X" else "X"
                 self.status_label.config(text=f"Player {self.current_player}'s turn")
 
-    def check_winner(self):
+    def check_winner(self): #CHECK WINNER
         winning_combinations = [(0,1,2), (3,4,5), (6,7,8), (0,3,6), (1,4,7), (2,5,8), (0,4,8), (2,4,6)]
         for a, b, c in winning_combinations:
             if self.board[a] == self.board[b] == self.board[c] and self.board[a] != "":
                 return True
         return False
 
-    def update_score(self):
+    def update_score(self): #UPDATE SCORE
         if self.current_player == "X":
             self.score_x += 1
         else:
             self.score_o += 1
         self.score_label.config(text=f"Score - X: {self.score_x} | O: {self.score_o}")
 
-    def disable_buttons(self):
+    def disable_buttons(self): #DISABLE BUTTONS
         for button in self.buttons:
             button.config(state=tk.DISABLED)
 
-    def enable_buttons(self):
+    def enable_buttons(self): #ENABLE BUTTONS
         for button in self.buttons:
             button.config(state=tk.NORMAL)
 
-    def reset_game(self):
+    def reset_game(self): #RESET GAME
         self.enable_buttons()
         self.current_player = "X"
         self.board = ["" for _ in range(9)]
@@ -120,18 +120,18 @@ class TicTacToe:
             button.config(text="")
         self.status_label.config(text="Player X's turn")
 
-    def go_back(self):
+    def go_back(self): #GO BACK
         self.root.destroy()
         subprocess.run(["python", "menu.py"])
 
-    def center_window(self, width=900, height=500):
+    def center_window(self, width=900, height=500): #CENTER WINDOW
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
         x = (screen_width // 2) - (width // 2)
         y = (screen_height // 2) - (height // 2)
         self.root.geometry(f"{width}x{height}+{x}+{y}")
 
-if __name__ == "__main__":
+if __name__ == "__main__": #MAIN
     root = tk.Tk()
     game = TicTacToe(root)
     root.mainloop()

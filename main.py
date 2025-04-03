@@ -9,14 +9,14 @@ CURRENT_USER_FILE = "current_user.json"
 RPS_SCORE_FILE = "rpsScore.json"
 RTT_SCORE_FILE = "rttScore.json"
 
-def center_window(root, width=900, height=500):
+def center_window(root, width=900, height=500): #CENTER WINDOW FUNCTION
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     x = (screen_width // 2) - (width // 2)
     y = (screen_height // 2) - (height // 2)
     root.geometry(f"{width}x{height}+{x}+{y}")
 
-def load_scores():
+def load_scores(): #FILE HANDLING (load from file)
     try:
         with open(RPS_SCORE_FILE, "r") as rps_file:
             rps_scores = json.load(rps_file)
@@ -31,22 +31,22 @@ def load_scores():
 
     return rps_scores, rtt_scores
 
-def load_users():
+def load_users(): #FILE HANDLING (load from file)
     try:
         with open(USER_FILE, "r") as file:
             return json.load(file)
     except FileNotFoundError:
         return {}
 
-def save_users(users):
+def save_users(users): #FILE HANDLING (load from file)
     with open(USER_FILE, "w") as file:
         json.dump(users, file, indent=4)
 
-def save_current_user(username):
+def save_current_user(username): #FILE HANDLING (load from file)
     with open(CURRENT_USER_FILE, "w") as file:
         json.dump({"username": username}, file)
 
-def sign_up():
+def sign_up(): #SIGN UP FUNCTION
     def register():
         username = entry_username.get().strip()
         password = entry_password.get().strip()
@@ -119,7 +119,7 @@ def sign_up():
 
     tk.Button(signup_window, text="Sign Up", command=register, font="Courier").pack(pady=20)
 
-def sign_in():
+def sign_in(): #SIGN IN FUNCTION
     def check_credentials():
         username = entry_username.get().strip()
         password = entry_password.get().strip()
@@ -155,7 +155,7 @@ def sign_in():
 
     tk.Button(signin_window, text="Sign In", command=check_credentials, font="Courier").pack(pady=10)
 
-def view_all_records():
+def view_all_records(): #VIEW ALL RECORDS FUNCTION
     users = load_users()
     rps_scores, rtt_scores = load_scores()
 
@@ -179,7 +179,8 @@ def view_all_records():
         )
 
         tk.Label(records_window, text=user_info, justify="left", padx=10, pady=5, font="Courier").pack()
-def search_record():
+
+def search_record(): ##SEARCH RECORD FUNCTION
     def search():
         username = entry_username.get().strip()
         users = load_users()
@@ -214,7 +215,7 @@ def search_record():
     result_label = tk.Label(frame, text="", font=("Courier", 12), justify="left")
     result_label.grid(row=2, column=0, columnspan=2, pady=10)
 
-def delete_user():
+def delete_user(): #DELETE USER FUNCTION
     def confirm_delete():
         username = entry_username.get().strip()
         users = load_users()
@@ -225,7 +226,7 @@ def delete_user():
             rps_scores.pop(username, None)
             rtt_scores.pop(username, None)
 
-            save_users(users)  # Update user records
+            save_users(users)
             with open(RPS_SCORE_FILE, "w") as rps_file:
                 json.dump(rps_scores, rps_file, indent=4)
             with open(RTT_SCORE_FILE, "w") as rtt_file:

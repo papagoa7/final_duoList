@@ -8,7 +8,7 @@ import json
 RPS_SCORE_FILE = "rpsScore.json"
 CURRENT_USER_FILE = "current_user.json"
 
-def load_current_user():
+def load_current_user(): #Load the current user from the JSON file
     try:
         with open(CURRENT_USER_FILE, "r") as file:
             data = json.load(file)
@@ -16,11 +16,11 @@ def load_current_user():
     except (FileNotFoundError, json.JSONDecodeError):
         return None
 
-def save_current_user(username):
+def save_current_user(username): #Save the current user to the JSON file
     with open(CURRENT_USER_FILE, "w") as file:
         json.dump({"username": username}, file)
 
-def load_score():
+def load_score(): #Load the score from the JSON file
     global current_user
     if current_user is None:
         return 0
@@ -31,7 +31,7 @@ def load_score():
     except (FileNotFoundError, json.JSONDecodeError):
         return 0
 
-def save_score():
+def save_score(): #Save the score to the JSON file
     global current_user, user_score
     if current_user is None:
         return
@@ -46,13 +46,13 @@ def save_score():
     with open(RPS_SCORE_FILE, "w") as file:
         json.dump(data, file)
 
-current_user = load_current_user()
+current_user = load_current_user() #Load the current user
 if current_user is None:
     current_user = "Guest"
     save_current_user(current_user)
 user_score = load_score()
 
-def show_rules():
+def show_rules(): #Show rules of the game in a popup window
     popup = tk.Toplevel(root)
     popup.title("Rules")
     popup.geometry("600x200")
@@ -82,7 +82,7 @@ def show_rules():
     popup.transient(root)
     popup.grab_set()
 
-def start_game():
+def start_game(): #Start the game and show the countdown
     disable_buttons()
     countdown_phrases = ["Rock...", "Paper...", "Scissors..."]
     for phrase in countdown_phrases:
@@ -92,7 +92,7 @@ def start_game():
     result_label.config(text="Shoot!", bg="black", fg="white")
     enable_buttons()
 
-def play(choice):
+def play(choice): #Play the game with the user's choice
     global user_score
     options = ["Rock", "Paper", "Scissors"]
     computer_choice = random.choice(options)
@@ -103,7 +103,7 @@ def play(choice):
     save_score()
     disable_buttons()
 
-def determine_winner(player, computer):
+def determine_winner(player, computer): #Determine the winner of the game
     global user_score
 
     if player == computer:
@@ -116,24 +116,24 @@ def determine_winner(player, computer):
     else:
         return "Computer wins!"
 
-def center_window(root, width=900, height=500):
+def center_window(root, width=900, height=500): #Center the window on the screen
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     x = (screen_width // 2) - (width // 2)
     y = (screen_height // 2) - (height // 2)
     root.geometry(f"{width}x{height}+{x}+{y}")
 
-def enable_buttons():
+def enable_buttons(): #Enable the buttons for the game
     rock_button.config(state=tk.NORMAL)
     paper_button.config(state=tk.NORMAL)
     scissors_button.config(state=tk.NORMAL)
 
-def disable_buttons():
+def disable_buttons(): #Disable the buttons for the game
     rock_button.config(state=tk.DISABLED)
     paper_button.config(state=tk.DISABLED)
     scissors_button.config(state=tk.DISABLED)
 
-def go_back():
+def go_back(): #Go back to the main menu
     root.destroy()
     subprocess.run(["python", "menu.py"])
 

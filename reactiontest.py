@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 RTT_SCORE_FILE = "rttScore.json"
 CURRENT_USER_FILE = "current_user.json"
 
-def load_current_user():
+def load_current_user(): # Load the current user from the JSON file
     try:
         with open(CURRENT_USER_FILE, "r") as file:
             data = json.load(file)
@@ -16,11 +16,11 @@ def load_current_user():
     except (FileNotFoundError, json.JSONDecodeError):
         return None
 
-def save_current_user(username):
+def save_current_user(username): # Save the current user to the JSON file
     with open(CURRENT_USER_FILE, "w") as file:
         json.dump({"username": username}, file)
 
-def load_score():
+def load_score(): # Load the score from the JSON file
     global current_user
     if current_user is None:
         return None
@@ -31,7 +31,7 @@ def load_score():
     except (FileNotFoundError, json.JSONDecodeError):
         return None
 
-def save_score():
+def save_score(): # Save the score to the JSON file
     global current_user, best_time
     if current_user is None or best_time is None:
         return
@@ -46,24 +46,24 @@ def save_score():
     with open(RTT_SCORE_FILE, "w") as file:
         json.dump(data, file)
 
-current_user = load_current_user()
+current_user = load_current_user() # Load the current user
 if current_user is None:
     current_user = "Guest"
     save_current_user(current_user)
 best_time = load_score()
 
-def start_test():
+def start_test():   # Start the reaction time test
     start_button.config(state=tk.DISABLED)
     result_label.config(text="Wait for it...")
     root.after(random.randint(2000, 5000), show_button)
 
-def show_button():
+def show_button(): # Show the button after a random delay
     global start_time
     test_button.config(bg="green", state=tk.NORMAL)
     result_label.config(text="Click now!")
     start_time = time.time()
 
-def check_reaction():
+def check_reaction(): # Check the reaction time
     global best_time
     reaction_time = time.time() - start_time
     test_button.config(bg="gray", state=tk.DISABLED)
@@ -76,14 +76,14 @@ def check_reaction():
 
     result_label.config(text=f"Reaction time: {reaction_time:.3f} seconds")
 
-def center_window(root, width=900, height=500):
+def center_window(root, width=900, height=500): # Center the window on the screen
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     x = (screen_width // 2) - (width // 2)
     y = (screen_height // 2) - (height // 2)
     root.geometry(f"{width}x{height}+{x}+{y}")
 
-def go_back():
+def go_back(): # Go back to the main menu
     root.destroy()
     subprocess.run(["python", "menu.py"])
 
