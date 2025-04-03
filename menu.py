@@ -62,6 +62,10 @@ def rockpaperscissors_game():
 def reactiontime_game():
     root.destroy()
     subprocess.run(["python", "reactiontest.py"])
+    
+def diceroll_game():
+    root.destroy()
+    subprocess.run(["python", "diceroll.py"])
 
 def center_window(root, width=900, height=500):
     screen_width = root.winfo_screenwidth()
@@ -86,6 +90,9 @@ def create_menu():
 
     reactiontime_button = tk.Button(root, text="Reaction Time Test", font=("Courier", 14), bg="steelblue", fg="white", width=30, borderwidth=5, command=reactiontime_game)
     reactiontime_button.pack(pady=10)
+    
+    diceroll_button = tk.Button(root, text="Dice Roll Game", font=("Courier", 14), bg="purple", fg="white", width=30, borderwidth=5, command=diceroll_game)
+    diceroll_button.pack(pady=10)
 
     logout_button = tk.Button(root, text="Sign Out", font=("Courier", 14), bg="red", fg="white", width=30, borderwidth=5, command=logout)
     logout_button.pack(pady=10)
